@@ -12,15 +12,15 @@ use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
+    use RegistersUsers;
+
     private $password_regex;
     private $phone_regex;
     private $name_regex;
 
     private const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z$%&!:]{6,}$';  // aaAA$$
     private const PHONE_REGEX = '\+?7(\d{10})';
-    private const NAME_REGEX = '[a-z][A-Z]';
-
-    use RegistersUsers;
+    private const NAME_REGEX = '[a-zA-Z]';
 
     /**
      * Where to redirect users after registration.
@@ -49,7 +49,7 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    { /*aaAA12$*/
+    {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255', "regex:/$this->name_regex/"],
             'phone' => ['required', "regex:/$this->phone_regex/", 'max:12'],
