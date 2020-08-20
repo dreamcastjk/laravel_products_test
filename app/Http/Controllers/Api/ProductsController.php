@@ -22,6 +22,6 @@ class ProductsController extends Controller
             $products = Product::addFilters(request()->get('properties'), $products);
         }
 
-        return $products->paginate(Product::DEFAULT_PAGINATION);
+        return $products->paginate();
     }
 }

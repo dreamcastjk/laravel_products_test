@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    const DEFAULT_PAGINATION = 40;  // пагинация для списка
-
     protected $guarded = ['id'];
 
     protected $hidden = ['id', 'created_at', 'updated_at'];
+
+    protected $perPage = 40;
 
     public $timestamps = false;
 
