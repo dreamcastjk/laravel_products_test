@@ -16,11 +16,9 @@ class RegisterController extends Controller
 
     private $password_regex;
     private $phone_regex;
-    private $name_regex;
 
     private const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z$%&!:]{6,}$';  // aaAA$$
     private const PHONE_REGEX = '\+?7(\d{10})';
-    private const NAME_REGEX = '[a-zA-Z]';
 
     /**
      * Where to redirect users after registration.
@@ -38,7 +36,6 @@ class RegisterController extends Controller
     {
         $this->password_regex = self::PASSWORD_REGEX;
         $this->phone_regex = self::PHONE_REGEX;
-        $this->name_regex = self::NAME_REGEX;
         $this->middleware('guest');
     }
 
@@ -51,13 +48,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255', "regex:/$this->name_regex/"],
-            'phone' => ['required', "regex:/$this->phone_regex/", 'max:12'],
+            'name' => ['required', 'string', 'max:255',],
+            'phone' => ['required', "regex:/$this->phone_regex/", 'max:12', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed', "regex:/$this->password_regex/"],
         ], [
             'name.regex' => trans('validation.name_register_validation'),
             'password.regex' => trans('passwords.registration.invalid_format'),
+            'phone.regex' => trans('validation.phone.wrong_phone_format'),
         ]);
     }
 

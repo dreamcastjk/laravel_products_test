@@ -48,7 +48,7 @@ class LoginController extends Controller
     {
         $login = request()->input('identity');
 
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         request()->merge([$field => $login]);
 
         return $field;
@@ -60,8 +60,8 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $messages = [
-            'identity.required' => 'Email or username cannot be empty',
-            'email.exists' => 'Email or username already registered',
+            'identity.required' => 'Email or phone cannot be empty',
+            'email.exists' => 'Email or phone already registered',
             'name.exists' => 'Username is already registered',
             'password.required' => 'Password cannot be empty',
         ];
@@ -71,6 +71,7 @@ class LoginController extends Controller
             'password' => 'required|string',
             'email' => 'string|exists:users',
             'name' => 'string|exists:users',
+            'phone' => 'string|exists:users'
         ], $messages);
     }
 }
