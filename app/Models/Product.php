@@ -34,11 +34,16 @@ class Product extends Model
      */
     public static function addFilters(array $properties, Builder $query)
     {
-        array_map(function ($column, $column_values) use ($query) {
-            $query->whereHas('properties', function (Builder $query) use ($column, $column_values) {
-                $query->whereIn($column, $column_values);
+        foreach ($properties as $property_title => $property_values) {
+
+            $query->whereHas('properties', function (Builder $properties_query) use ($property_values, $property_title) {
+                $properties_query
+                    ->where(['title' => $property_title])
+                    ->whereHas('values', function (Builder $values_query) use ($property_values) {
+                        $values_query->whereIn('name', $property_values);
+                    });
             });
-        }, array_keys($properties), $properties);
+        }
 
         return $query;
     }

@@ -21,4 +21,12 @@ class Property extends Model
     {
         return $this->hasOne(Product::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function values()
+    {
+        return $this->hasMany(Value::class);
+    }
 }

@@ -3,23 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductPropertiesRequest;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
     /**
      * Список товаров
      *
-     * @param ProductPropertiesRequest $request
+     * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function __invoke(ProductPropertiesRequest $request)
+    public function __invoke(Request $request)
     {
-        $products = Product::with('properties');
+        $products = Product::with(['properties' => function ($query) {
+            $query->with('values');
+        }]);
 
         if (request()->has('properties')) {
-            $products = Product::addFilters(request()->get('properties'), $products);
+            $products = Product::addFilters($request->get('properties'), $products);
         }
 
         return $products->paginate();
